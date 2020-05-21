@@ -17,33 +17,32 @@ public class TaskController {
     private ITaskService taskServiceImpl;
 
     @PostMapping("/create")
-    public Task createTask() {
-        return taskServiceImpl.createTask(null);
+    public Task createTask(@RequestBody Task task) {
+        return taskServiceImpl.createTask(task);
     }
 
     @PostMapping("/update")
-    public Task updateTask() {
-        return taskServiceImpl.updateTask(null);
+    public Task updateTask(@RequestBody Task task) {
+        return taskServiceImpl.updateTask(task);
     }
 
     @PostMapping("/updateTaskStatus")
-    public Task updateTaskStatus(@RequestBody Task taskDto) {
-        return taskServiceImpl.updateTaskStatus(null);
+    public Task updateTaskStatus(@RequestBody Task task) {
+        return taskServiceImpl.updateTaskStatus(task);
     }
 
-
-    @PostMapping("/createParent")
+    @PostMapping("/createParentTask")
     public ParentTask createParentTask(@RequestBody ParentTask parentTask) {
-        return taskServiceImpl.createParentTask(null);
+        return taskServiceImpl.createParentTask(parentTask);
     }
 
-    @GetMapping("/findAllParent")
-    public List<ParentTask> findAllParentTasks() {
+    @GetMapping("/findAllParentTask")
+    public List<ParentTask> findAllParentTask() {
         return taskServiceImpl.findAllParentTasks();
     }
 
     @GetMapping("/findAllParentTasksByInput/{input}")
     public List<ParentTask> findAllParentTasksByInput(@PathVariable("input") String input) {
-        return taskServiceImpl.findAllParentTasksByInput(null);
+        return taskServiceImpl.findAllParentTasksByInput(input);
     }
 }

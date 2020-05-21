@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -25,7 +25,30 @@ public class TaskServiceImpl implements ITaskService {
     private ParentTaskRepository parentTaskRepository;
 
     public Task createTask(Task task) {
-        return new Task();
+        if (task.getParentTaskId() != 0) {
+            Optional<ParentTask> optParentTask = parentTaskRepository.findById(task.getParentTaskId());
+            optParentTask.ifPresent(task::setParentTask);
+        }
+        if (task.getProjectId() != 0) {
+            Optional<Project> optProject = projectRepository.findById(task.getProjectId());
+            optProject.ifPresent(task::setProject);
+        }
+
+        taskRepository.save(task);
+        setUser(task);
+        return task;
+    }
+
+    private void setUser(final Task task) {
+        if (task.getUserId() != 0) {
+            final Optional<User> optUser = userRepository.findByEmployeeId(task.getUserId());
+            if (optUser.isPresent()) {
+                final User user = optUser.get();
+                user.setTask(task);
+                user.setProject(task.getProject());
+                userRepository.save(user);
+            }
+        }
     }
 
     public Task updateTask(Task task) {
@@ -37,14 +60,18 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     public ParentTask createParentTask(ParentTask parentTask) {
-        return new ParentTask();
+        parentTaskRepository.save(parentTask);
+        return parentTask;
     }
 
     public List<ParentTask> findAllParentTasks() {
-        return Arrays.asList(new ParentTask());
+        return parentTaskRepository.findAll();
     }
 
     public List<ParentTask> findAllParentTasksByInput(String input) {
-        return Arrays.asList(new ParentTask());
+        if ("default".equals(input)) {
+            return findAllParentTasks();
+        }
+        return parentTaskRepository.findByParentTaskNameContaining(input);
     }
 }

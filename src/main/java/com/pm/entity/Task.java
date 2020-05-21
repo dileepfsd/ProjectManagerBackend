@@ -27,4 +27,21 @@ public class Task {
     private int priority;
     private String status;
 
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "PARENT_TASK_ID")
+    private ParentTask parentTask;
+
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "PROJECT_ID")
+    private Project project;
+
+    @Transient
+    private long userId;
+
+    @Transient
+    private long projectId;
+
+    @Transient
+    private long parentTaskId;
+
 }

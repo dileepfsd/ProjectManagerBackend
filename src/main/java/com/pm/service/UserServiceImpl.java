@@ -21,8 +21,8 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     public User createUser(User user) {
-        User vUser = userRepository.findByEmployeeId(user.getEmployeeId());
-        if (vUser != null) {
+        Optional<User> vUser = userRepository.findByEmployeeId(user.getEmployeeId());
+        if (vUser.isPresent()) {
             throw new UserException("Employee Id already exists");
         }
         userRepository.save(user);

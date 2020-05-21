@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -15,9 +16,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByEmployeeIdContaining(String input);
 
-   /* @Query("select u from User u where u.project.projectId=:id")
-    List<User> findByProjectId(Long id);*/
+    @Query("select u from User u where u.project.projectId=:id")
+    List<User> findUserByProjectId(Long id);
 
-    User findByEmployeeId(Long id);
+    Optional<User> findByEmployeeId(Long id);
 }
 

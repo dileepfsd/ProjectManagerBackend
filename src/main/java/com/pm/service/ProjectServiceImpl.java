@@ -1,7 +1,6 @@
 package com.pm.service;
 
 import com.pm.entity.Project;
-import com.pm.entity.Task;
 import com.pm.entity.User;
 import com.pm.repository.ProjectRepository;
 import com.pm.repository.UserRepository;
@@ -10,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,13 +22,16 @@ public class ProjectServiceImpl implements IProjectService {
     private UserRepository userRepository;
 
     public Project createProject(Project project) {
-        Optional<User> userOpt = userRepository.findById(project.getUserId());
-        User user = null;
-        if (userOpt.isPresent()) {
-            user = userOpt.get();
-            //project.addUser(user);
+        if (project != null) {
+            projectRepository.save(project);
+            Optional<User> optUser = userRepository.findById(project.getUserId());
+            if (optUser.isPresent()) {
+                User user = optUser.get();
+                user.setProject(project);
+                userRepository.save(user);
+                project.setManagerName(user.getFirstName());
+            }
         }
-        projectRepository.save(project);
         return project;
     }
 
@@ -54,31 +55,36 @@ public class ProjectServiceImpl implements IProjectService {
     public Project findProjectById(Long id) {
         Optional<Project> optProject = projectRepository.findById(id);
         if (optProject.isPresent()) {
-            return optProject.get();
+            final Project project = optProject.get();
+            List<User> users = userRepository.findUserByProjectId(id);
+            if (!users.isEmpty()) {
+                project.setManagerName(users.get(0).getFirstName());
+            }
+            return project;
         }
-        return new Project();
+        return null;
     }
 
     public Project deleteProject(Long id) {
         final Optional<Project> optProject = projectRepository.findById(id);
         optProject.ifPresent(project -> {
-           /* for (User user : project.getUsers()) {
+            List<User> users = userRepository.findUserByProjectId(id);
+            for (User user : users) {
                 user.setProject(null);
-                user.setTask(null);
             }
-            for (Task task : project.getTasks()) {
+            //    user.setTask(null);
+
+   /*         for (Task task : project.getTasks()) {
                 task.setProject(null);
-            }
-            project.setUsers(null);
-            project.setTasks(null);*/
+            }*/
             projectRepository.delete(project);
         });
         return new Project();
     }
 
     private void setCountOfTask(List<Project> projects) {
-        for (Project project : projects) {
-/*            List<Task> taskDtos = project.getTaskDtos();
+        /*for (Project project : projects) {
+            List<Task> taskDtos = project.getTaskDtos();
             if (taskDtos != null && !taskDtos.isEmpty()) {
                 projectDto.setTotalNoOfTasks(taskDtos.size());
                 int noOfCompletedTasks = 0;
@@ -89,6 +95,6 @@ public class ProjectServiceImpl implements IProjectService {
                     projectDto.setTotalNoOfCompletedTasks(noOfCompletedTasks);
                 }
             }*/
-        }
     }
 }
+

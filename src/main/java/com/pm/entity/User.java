@@ -18,4 +18,12 @@ public class User {
     private String firstName;
     private String lastName;
     private long employeeId;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PROJECT_ID")
+    private Project project;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "TASK_ID")
+    private Task task;
 }
