@@ -1,0 +1,30 @@
+package com.pm.entity;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class Task {
+    @Id
+    @SequenceGenerator(name = "taskSeqGen", sequenceName = "taskSeq", initialValue = 1, allocationSize = 100)
+    @GeneratedValue(generator = "taskSeqGen")
+    private long taskId;
+
+    private String taskName;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private int priority;
+    private String status;
+
+}
