@@ -45,4 +45,9 @@ public class TaskController {
     public List<ParentTask> findAllParentTasksByInput(@PathVariable("input") String input) {
         return taskServiceImpl.findAllParentTasksByInput(input);
     }
+
+    @GetMapping("/findTasksByProjectId/{input}")
+    public List<Task> findTasksByProjectId(@PathVariable("input") Long id) {
+        return taskServiceImpl.findTasksByProjectId(id);
+    }
 }

@@ -52,7 +52,11 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     public Task updateTask(Task task) {
-        return new Task();
+        log.info("-updateTask-");
+        if (task != null) {
+            taskRepository.save(task);
+        }
+        return task;
     }
 
     public Task updateTaskStatus(Task task) {
@@ -73,5 +77,16 @@ public class TaskServiceImpl implements ITaskService {
             return findAllParentTasks();
         }
         return parentTaskRepository.findByParentTaskNameContaining(input);
+    }
+
+    public List<Task> findTasksByProjectId(Long id) {
+        List<Task> tasks = taskRepository.findTasksByProjectId(id);
+        for (Task task : tasks) {
+            Optional<User> optUser = taskRepository.findUserByTaskId(task.getTaskId());
+            if (optUser.isPresent()) {
+                task.setUserName(optUser.get().getFirstName());
+            }
+        }
+        return tasks;
     }
 }

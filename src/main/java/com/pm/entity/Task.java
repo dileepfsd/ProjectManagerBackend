@@ -44,4 +44,6 @@ public class Task {
     @Transient
     private long parentTaskId;
 
+    @Transient
+    private String userName;
 }

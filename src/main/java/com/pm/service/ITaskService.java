@@ -18,4 +18,6 @@ public interface ITaskService {
 
     List<ParentTask> findAllParentTasksByInput(String input);
 
+    List<Task> findTasksByProjectId(Long id);
+
 }
