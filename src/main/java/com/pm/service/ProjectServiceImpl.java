@@ -1,8 +1,10 @@
 package com.pm.service;
 
 import com.pm.entity.Project;
+import com.pm.entity.Task;
 import com.pm.entity.User;
 import com.pm.repository.ProjectRepository;
+import com.pm.repository.TaskRepository;
 import com.pm.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,8 @@ public class ProjectServiceImpl implements IProjectService {
     private ProjectRepository projectRepository;
     @Resource
     private UserRepository userRepository;
+    @Resource
+    private TaskRepository taskRepository;
 
     public Project createProject(Project project) {
         if (project != null) {
@@ -36,6 +40,10 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     public List<Project> findAllProjects() {
+        return projectRepository.findAll();
+    }
+
+    public List<Project> findAllProjectsWithTaskStatus() {
         List<Project> projects = projectRepository.findAll();
         setCountOfTask(projects);
         return projects;
@@ -71,30 +79,28 @@ public class ProjectServiceImpl implements IProjectService {
             List<User> users = userRepository.findUserByProjectId(id);
             for (User user : users) {
                 user.setProject(null);
+                user.setTask(null);
             }
-            //    user.setTask(null);
-
-   /*         for (Task task : project.getTasks()) {
+            List<Task> tasks = taskRepository.findTasksByProjectId(id);
+            for (Task task : tasks) {
                 task.setProject(null);
-            }*/
+            }
             projectRepository.delete(project);
         });
         return new Project();
     }
 
     private void setCountOfTask(List<Project> projects) {
-        /*for (Project project : projects) {
-            List<Task> taskDtos = project.getTaskDtos();
-            if (taskDtos != null && !taskDtos.isEmpty()) {
-                projectDto.setTotalNoOfTasks(taskDtos.size());
-                int noOfCompletedTasks = 0;
-                for (TaskDto taskDto : taskDtos) {
-                    if ("COMPLETE".equals(taskDto.getStatus())) {
-                        noOfCompletedTasks = noOfCompletedTasks + 1;
-                    }
-                    projectDto.setTotalNoOfCompletedTasks(noOfCompletedTasks);
-                }
-            }*/
+        for (Project project : projects) {
+            List<String> statusList = taskRepository.findTaskStatusByProjectId(project.getProjectId());
+            if (statusList != null && statusList.size() > 0) {
+                project.setTotalNoOfTasks(statusList.size());
+                project.setTotalNoOfCompletedTasks(statusList.stream().filter(status -> "COMPLETE".equalsIgnoreCase(status)).count());
+            } else {
+                project.setTotalNoOfTasks(0);
+                project.setTotalNoOfCompletedTasks(0);
+            }
+        }
     }
 }
 

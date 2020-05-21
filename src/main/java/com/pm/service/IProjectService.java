@@ -9,6 +9,8 @@ public interface IProjectService {
 
     List<Project> findAllProjects();
 
+    List<Project> findAllProjectsWithTaskStatus();
+
     List<Project> findAllProjectByInput(String input);
 
     Project findProjectById(Long id);

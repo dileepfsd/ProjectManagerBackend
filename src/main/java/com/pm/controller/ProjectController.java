@@ -25,6 +25,11 @@ public class ProjectController {
         return projectServiceImpl.findAllProjects();
     }
 
+    @GetMapping("/findAllProjectsWithTaskStatus")
+    public List<Project> findAllProjectsWithTaskStatus() {
+        return projectServiceImpl.findAllProjectsWithTaskStatus();
+    }
+
     @GetMapping("/findAllProjectByInput/{input}")
     public List<Project> findAllProjectByInput(@PathVariable("input") String input) {
         return projectServiceImpl.findAllProjectByInput(input);

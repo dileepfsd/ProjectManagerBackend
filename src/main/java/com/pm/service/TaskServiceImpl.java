@@ -41,9 +41,9 @@ public class TaskServiceImpl implements ITaskService {
                 final User user = optUser.get();
                 user.setTask(task);
                 user.setProject(task.getProject());
-                userRepository.save(user);
             }
         }
+        task.setStatus("START");
         taskRepository.save(task);
         return task;
     }

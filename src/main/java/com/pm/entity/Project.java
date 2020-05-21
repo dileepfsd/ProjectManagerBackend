@@ -44,4 +44,10 @@ public class Project {
 
     @Transient
     public String managerName;
+
+    @Transient
+    private long totalNoOfTasks;
+
+    @Transient
+    private long totalNoOfCompletedTasks;
 }
