@@ -43,7 +43,7 @@ public class UserController {
 
     @GetMapping("/findUserByProjectId/{id}")
     public List<User> findUserByProjectId(@PathVariable("id") Long id) {
-        return userServiceImpl.findUserByProjectId(null);
+        return userServiceImpl.findUserByProjectId(id);
     }
 
 }

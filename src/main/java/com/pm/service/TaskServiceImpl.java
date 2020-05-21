@@ -24,6 +24,7 @@ public class TaskServiceImpl implements ITaskService {
     @Resource
     private ParentTaskRepository parentTaskRepository;
 
+    @Transactional
     public Task createTask(Task task) {
         if (task.getParentTaskId() != 0) {
             Optional<ParentTask> optParentTask = parentTaskRepository.findById(task.getParentTaskId());
@@ -34,14 +35,8 @@ public class TaskServiceImpl implements ITaskService {
             optProject.ifPresent(task::setProject);
         }
 
-        taskRepository.save(task);
-        setUser(task);
-        return task;
-    }
-
-    private void setUser(final Task task) {
         if (task.getUserId() != 0) {
-            final Optional<User> optUser = userRepository.findByEmployeeId(task.getUserId());
+            final Optional<User> optUser = userRepository.findById(task.getUserId());
             if (optUser.isPresent()) {
                 final User user = optUser.get();
                 user.setTask(task);
@@ -49,6 +44,8 @@ public class TaskServiceImpl implements ITaskService {
                 userRepository.save(user);
             }
         }
+        taskRepository.save(task);
+        return task;
     }
 
     public Task updateTask(Task task) {
@@ -60,7 +57,14 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     public Task updateTaskStatus(Task task) {
-        return new Task();
+        log.info("-updateTaskStatus-");
+        Optional<Task> optTask = taskRepository.findById(task.getTaskId());
+        if (optTask.isPresent()) {
+            final Task ntask = optTask.get();
+            ntask.setStatus("COMPLETE");
+            taskRepository.save(ntask);
+        }
+        return null;
     }
 
     public ParentTask createParentTask(ParentTask parentTask) {

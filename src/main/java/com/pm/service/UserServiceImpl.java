@@ -21,11 +21,15 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     public User createUser(User user) {
-        Optional<User> vUser = userRepository.findByEmployeeId(user.getEmployeeId());
-        if (vUser.isPresent()) {
-            throw new UserException("Employee Id already exists");
+        if (user != null && user.getUserId() > 0) {
+            userRepository.save(user);
+        } else {
+            Optional<User> vUser = userRepository.findByEmployeeId(user.getEmployeeId());
+            if (vUser.isPresent()) {
+                throw new UserException("Employee Id already exists");
+            }
+            userRepository.save(user);
         }
-        userRepository.save(user);
         return user;
     }
 
