@@ -1,9 +1,10 @@
 package com.pm.controller;
 
 import com.pm.entity.Project;
+import com.pm.service.IProjectService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
@@ -11,30 +12,31 @@ import java.util.List;
 @RequestMapping("/project")
 public class ProjectController {
 
+    @Resource
+    private IProjectService projectServiceImpl;
+
     @PostMapping("/create")
     public Project createProject(@RequestBody Project project) {
-        return new Project();
+        return projectServiceImpl.createProject(project);
     }
 
     @GetMapping("/findAllProjects")
     public List<Project> findAllProjects() {
-
-        return Arrays.asList(new Project());
+        return projectServiceImpl.findAllProjects();
     }
 
     @GetMapping("/findAllProjectByInput/{input}")
     public List<Project> findAllProjectByInput(@PathVariable("input") String input) {
-        return Arrays.asList(new Project());
+        return projectServiceImpl.findAllProjectByInput(input);
     }
 
     @GetMapping("/findProjectById/{id}")
     public Project findProjectById(@PathVariable("id") Long id) {
-
-        return new Project();
+        return projectServiceImpl.findProjectById(id);
     }
 
     @PostMapping("/delete")
     public Project deleteProject(@RequestBody Long id) {
-        return new Project();
+        return projectServiceImpl.deleteProject(id);
     }
 }

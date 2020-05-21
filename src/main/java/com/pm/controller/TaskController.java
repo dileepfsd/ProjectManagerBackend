@@ -2,9 +2,10 @@ package com.pm.controller;
 
 import com.pm.entity.ParentTask;
 import com.pm.entity.Task;
+import com.pm.service.ITaskService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
@@ -12,34 +13,37 @@ import java.util.List;
 @RequestMapping("/task")
 public class TaskController {
 
+    @Resource
+    private ITaskService taskServiceImpl;
+
     @PostMapping("/create")
     public Task createTask() {
-        return new Task();
+        return taskServiceImpl.createTask(null);
     }
 
     @PostMapping("/update")
     public Task updateTask() {
-        return new Task();
+        return taskServiceImpl.updateTask(null);
     }
 
     @PostMapping("/updateTaskStatus")
     public Task updateTaskStatus(@RequestBody Task taskDto) {
-        return new Task();
+        return taskServiceImpl.updateTaskStatus(null);
     }
 
 
     @PostMapping("/createParent")
     public ParentTask createParentTask(@RequestBody ParentTask parentTask) {
-        return new ParentTask();
+        return taskServiceImpl.createParentTask(null);
     }
 
     @GetMapping("/findAllParent")
     public List<ParentTask> findAllParentTasks() {
-        return Arrays.asList(new ParentTask());
+        return taskServiceImpl.findAllParentTasks();
     }
 
     @GetMapping("/findAllParentTasksByInput/{input}")
     public List<ParentTask> findAllParentTasksByInput(@PathVariable("input") String input) {
-        return Arrays.asList(new ParentTask());
+        return taskServiceImpl.findAllParentTasksByInput(null);
     }
 }

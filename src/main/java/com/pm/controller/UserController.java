@@ -1,9 +1,10 @@
 package com.pm.controller;
 
 import com.pm.entity.User;
+import com.pm.service.IUserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
@@ -11,38 +12,38 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
+    @Resource
+    private IUserService userServiceImpl;
 
     @PostMapping("/create")
-    public User createUser(@RequestBody User userDto) {
-
-        return new User();
+    public User createUser(@RequestBody User user) {
+        return userServiceImpl.createUser(user);
     }
 
-    @GetMapping("/findAll")
+    @GetMapping("/findAllUser")
     public List<User> findAllUser() {
-
-        return Arrays.asList(new User());
+        return userServiceImpl.findAllUser();
     }
 
     @GetMapping("/findAllUserByInput/{input}")
     public List<User> findAllUserByInput(@PathVariable("input") String input) {
-        return Arrays.asList(new User());
+        return userServiceImpl.findAllUserByInput(input);
     }
 
     @GetMapping("/findUserById/{id}")
     public User findUser(@PathVariable("id") Long id) {
-        return new User();
+        return userServiceImpl.findById(id);
     }
 
     @PostMapping("/delete")
     public User deleteUser(@RequestBody Long id) {
 
-        return new User();
+        return userServiceImpl.deleteUser(id);
     }
 
     @GetMapping("/findUserByProjectId/{id}")
     public List<User> findUserByProjectId(@PathVariable("id") Long id) {
-        return Arrays.asList(new User());
+        return userServiceImpl.findUserByProjectId(null);
     }
 
 }
