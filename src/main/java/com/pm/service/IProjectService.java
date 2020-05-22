@@ -13,6 +13,8 @@ public interface IProjectService {
 
     List<Project> findAllProjectByInput(String input);
 
+    List<Project> findAllProjectByInputWithTask(String input);
+
     Project findProjectById(Long id);
 
     Project deleteProject(Long id);

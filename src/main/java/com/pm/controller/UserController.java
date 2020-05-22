@@ -40,10 +40,4 @@ public class UserController {
 
         return userServiceImpl.deleteUser(id);
     }
-
-    @GetMapping("/findUserByProjectId/{id}")
-    public List<User> findUserByProjectId(@PathVariable("id") Long id) {
-        return userServiceImpl.findUserByProjectId(id);
-    }
-
 }

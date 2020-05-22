@@ -120,24 +120,6 @@ public class UserControllerTest {
         assertNotNull(mvcResult.getResponse().getContentAsString());
     }
 
-    @Test
-    public void findUserByProjectId() throws Exception {
-        final User user = mockUser();
-        List<User> users = Arrays.asList(user, user);
-        ObjectMapper mapper = new ObjectMapper();
-        when(userServiceImpl.findUserByProjectId(anyLong())).thenReturn(users);
-        String requestJson = mapper.writeValueAsString(users);
-        final MvcResult mvcResult = mockMvc.perform(
-                get("/user/findUserByProjectId/10")
-                        .content(requestJson)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk()).andDo(print())
-                .andReturn();
-        verify(userServiceImpl, times(1)).findUserByProjectId(anyLong());
-        assertNotNull(mvcResult.getResponse().getContentAsString());
-    }
-
     private User mockUser() {
         final User user = new User();
         user.setFirstName("Test");

@@ -35,6 +35,11 @@ public class ProjectController {
         return projectServiceImpl.findAllProjectByInput(input);
     }
 
+    @GetMapping("/findAllProjectByInputWithTask/{input}")
+    public List<Project> findAllProjectByInputWithTask(@PathVariable("input") String input) {
+        return projectServiceImpl.findAllProjectByInputWithTask(input);
+    }
+
     @GetMapping("/findProjectById/{id}")
     public Project findProjectById(@PathVariable("id") Long id) {
         return projectServiceImpl.findProjectById(id);

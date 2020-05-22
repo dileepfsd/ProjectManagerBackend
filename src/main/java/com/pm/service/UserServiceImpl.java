@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,10 +43,10 @@ public class UserServiceImpl implements IUserService {
             return findAllUser();
         }
         users = userRepository.findByFirstNameContaining(input);
-        if (users != null && users.isEmpty()) {
+        if (users != null && users.size() == 0) {
             users = userRepository.findByLastNameContaining(input);
         }
-        if (users != null && users.isEmpty()) {
+        if (users != null && users.size() == 0) {
             users = userRepository.findByEmployeeIdContaining(input);
         }
         return users;
@@ -71,10 +70,6 @@ public class UserServiceImpl implements IUserService {
             // user.setTask(null);
             userRepository.delete(user);
         }
-        return new User();
-    }
-
-    public List<User> findUserByProjectId(Long id) {
-        return Arrays.asList(new User());
+        return null;
     }
 }

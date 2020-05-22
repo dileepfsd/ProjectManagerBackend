@@ -54,6 +54,18 @@ public class ProjectServiceImpl implements IProjectService {
             return findAllProjects();
         } else if (!"undefined".equals(input)) {
             List<Project> projects = projectRepository.findByProjectTitleContaining(input);
+            return projects;
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Project> findAllProjectByInputWithTask(String input) {
+        if ("default".equals(input)) {
+            List<Project> projects = findAllProjects();
+            setCountOfTask(projects);
+            return projects;
+        } else if (!"undefined".equals(input)) {
+            List<Project> projects = projectRepository.findByProjectTitleContaining(input);
             setCountOfTask(projects);
             return projects;
         }
@@ -87,7 +99,7 @@ public class ProjectServiceImpl implements IProjectService {
             }
             projectRepository.delete(project);
         });
-        return new Project();
+        return null;
     }
 
     private void setCountOfTask(List<Project> projects) {
@@ -103,4 +115,3 @@ public class ProjectServiceImpl implements IProjectService {
         }
     }
 }
-

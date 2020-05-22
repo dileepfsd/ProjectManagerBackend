@@ -14,6 +14,4 @@ public interface IUserService {
     User findById(Long id);
 
     User deleteUser(Long id);
-
-    List<User> findUserByProjectId(Long id);
 }
