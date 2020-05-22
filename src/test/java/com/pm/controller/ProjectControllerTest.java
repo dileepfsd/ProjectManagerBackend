@@ -118,6 +118,40 @@ public class ProjectControllerTest {
         assertNotNull(content);
     }
 
+    @Test
+    public void findAllProjectsWithTaskStatus() throws Exception {
+        when(projectServiceImpl.findAllProjectsWithTaskStatus()).thenReturn(Arrays.asList(mockProject()));
+        ObjectMapper mapper = new ObjectMapper();
+        String requestJson = mapper.writeValueAsString(Arrays.asList(mockProject()));
+        final MvcResult mvcResult = mockMvc.perform(
+                get("/project/findAllProjectsWithTaskStatus")
+                        .content(requestJson)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk()).andDo(print())
+                .andReturn();
+        String content = mvcResult.getResponse().getContentAsString();
+        verify(projectServiceImpl, times(1)).findAllProjectsWithTaskStatus();
+        assertNotNull(content);
+    }
+
+    @Test
+    public void findAllProjectByInputWithTask() throws Exception {
+        when(projectServiceImpl.findAllProjectByInputWithTask(anyString())).thenReturn(Arrays.asList(mockProject()));
+        ObjectMapper mapper = new ObjectMapper();
+        String requestJson = mapper.writeValueAsString(Arrays.asList(mockProject()));
+        final MvcResult mvcResult = mockMvc.perform(
+                get("/project/findAllProjectByInputWithTask/test")
+                        .content(requestJson)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk()).andDo(print())
+                .andReturn();
+        String content = mvcResult.getResponse().getContentAsString();
+        verify(projectServiceImpl, times(1)).findAllProjectByInputWithTask(anyString());
+        assertNotNull(content);
+    }
+
     private Project mockProject() {
         final Project project = new Project();
         project.setProjectId(0);

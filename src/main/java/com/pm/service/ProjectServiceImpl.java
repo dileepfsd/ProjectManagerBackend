@@ -53,8 +53,7 @@ public class ProjectServiceImpl implements IProjectService {
         if ("default".equals(input)) {
             return findAllProjects();
         } else if (!"undefined".equals(input)) {
-            List<Project> projects = projectRepository.findByProjectTitleContaining(input);
-            return projects;
+            return projectRepository.findByProjectTitleContaining(input);
         }
         return new ArrayList<>();
     }
@@ -105,9 +104,15 @@ public class ProjectServiceImpl implements IProjectService {
     private void setCountOfTask(List<Project> projects) {
         for (Project project : projects) {
             List<String> statusList = taskRepository.findTaskStatusByProjectId(project.getProjectId());
-            if (statusList != null && statusList.size() > 0) {
+            if (statusList != null && !statusList.isEmpty()) {
                 project.setTotalNoOfTasks(statusList.size());
-                project.setTotalNoOfCompletedTasks(statusList.stream().filter(status -> "COMPLETE".equalsIgnoreCase(status)).count());
+                List<String> cList = new ArrayList<>();
+                for (String status : statusList) {
+                    if ("COMPLETE".equalsIgnoreCase(status)) {
+                        cList.add(status);
+                    }
+                }
+                project.setTotalNoOfCompletedTasks(cList.size());
             } else {
                 project.setTotalNoOfTasks(0);
                 project.setTotalNoOfCompletedTasks(0);

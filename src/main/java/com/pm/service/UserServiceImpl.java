@@ -20,14 +20,16 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     public User createUser(User user) {
-        if (user != null && user.getUserId() > 0) {
-            userRepository.save(user);
-        } else {
-            Optional<User> vUser = userRepository.findByEmployeeId(user.getEmployeeId());
-            if (vUser.isPresent()) {
-                throw new UserException("Employee Id already exists");
+        if (user != null) {
+            if (user.getUserId() > 0) {
+                userRepository.save(user);
+            } else {
+                Optional<User> vUser = userRepository.findByEmployeeId(user.getEmployeeId());
+                if (vUser.isPresent()) {
+                    throw new UserException("Employee Id already exists");
+                }
+                userRepository.save(user);
             }
-            userRepository.save(user);
         }
         return user;
     }
@@ -43,10 +45,10 @@ public class UserServiceImpl implements IUserService {
             return findAllUser();
         }
         users = userRepository.findByFirstNameContaining(input);
-        if (users != null && users.size() == 0) {
+        if (users != null && users.isEmpty()) {
             users = userRepository.findByLastNameContaining(input);
         }
-        if (users != null && users.size() == 0) {
+        if (users != null && users.isEmpty()) {
             users = userRepository.findByEmployeeIdContaining(input);
         }
         return users;
@@ -66,8 +68,6 @@ public class UserServiceImpl implements IUserService {
         final Optional<User> optUser = userRepository.findById(id);
         if (optUser.isPresent()) {
             final User user = optUser.get();
-            //user.setProject(null);
-            // user.setTask(null);
             userRepository.delete(user);
         }
         return null;
